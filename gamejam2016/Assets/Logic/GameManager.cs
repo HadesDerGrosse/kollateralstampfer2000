@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour {
     public float infectionDuration = 10;
     public float infectionCooldown = 1;
 
+    public GameObject startUI;
+    public GameObject endUI;
+
     [HideInInspector]
     public Player[] players;
 	
@@ -18,12 +21,39 @@ public class GameManager : MonoBehaviour {
         current = this;
     }
 
-	void Start () {
+	void Awake () {
         players = FindObjectsOfType<Player>();
-        players[Random.Range(0, 3)].Infect();
     }
 	
 	void Update () {
-	
+        if (Input.GetButton("start"))
+            StartGame();
 	}
+
+    public void StartGame()
+    {
+        players[Random.Range(0, 3)].Infect();
+        startUI.SetActive(false);
+        endUI.SetActive(false);
+        SetKinematicToPlayers(false);
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].ResetTransform();
+        }
+    }
+
+    public void EndGame(PlayerNumber pNum)
+    {
+        SetKinematicToPlayers(true);
+        endUI.SetActive(true);
+    }
+
+
+    private void SetKinematicToPlayers(bool kinematic)
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].GetComponent<Rigidbody2D>().isKinematic = kinematic;
+        }
+    }
 }

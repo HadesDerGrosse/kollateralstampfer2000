@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
     private bool boost;
     private float rotate;
     private float infectionTime = 0;
+    private Vector3 startPos;
 
 
     public bool GetBoost()
@@ -23,6 +24,11 @@ public class Player : MonoBehaviour {
     public float GetRotate()
     {
         return rotate;
+    }
+
+    public float GetInfectionStatePercent()
+    {
+        return (Time.time - infectionTime)/GameManager.current.infectionDuration;
     }
 
     public void Infect()
@@ -38,7 +44,18 @@ public class Player : MonoBehaviour {
         GetComponentsInChildren<Renderer>()[0].material = standardMaterial;
     }
 
+    public void ResetTransform()
+    {
+        transform.position = startPos;
+        transform.localRotation = Quaternion.identity;
+    }
+
 	
+
+    void Awake()
+    {
+        startPos = transform.position;
+    }
 	
 	void Update () {
         boost = Input.GetButton("Boost_" + pNum);
@@ -46,7 +63,7 @@ public class Player : MonoBehaviour {
 
         //TODO actually kill player
         if (Time.time - infectionTime > GameManager.current.infectionDuration && infected)
-            Debug.Log("Die!!!!!!!!!!!!");
+            GameManager.current.EndGame(pNum);
     }
 
     void OnCollisionEnter2D(Collision2D other)
