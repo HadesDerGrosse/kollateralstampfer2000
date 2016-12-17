@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public enum PlayerNumber { P1, P2, P3, P4 }
 
@@ -33,6 +34,8 @@ public class Player : MonoBehaviour {
     {
         infected = true;
         infectionTime = Time.time;
+        GameManager.current.infectionUI.GetComponent<AttachUIToPlayer>().Attach(transform);
+        GameManager.current.infectionUI.SetActive(true);
     }
 
     public void Heal()
@@ -56,16 +59,23 @@ public class Player : MonoBehaviour {
 	void Update () {
         boost = Input.GetButton("Boost_" + pNum);
         rotate = Input.GetAxis("Turn_" + pNum);
-        Debug.Log(GetInfectionStatePercent());
-        //TODO actually kill player
+
+        if (infected)
+            GameManager.current.infectionUI.GetComponent<Text>().text = GetInfectionStatePercent().ToString();
+
         if (Time.time - infectionTime > GameManager.current.infectionDuration && infected)
+        {
             GameManager.current.EndGame(pNum);
+            GameManager.current.infectionUI.SetActive(false);
+            Heal();
+        }
     }
 
     void OnCollisionEnter2D(Collision2D other)
     {
         if (infected && other.gameObject.GetComponent<Player>() && (Time.time - infectionTime) > GameManager.current.infectionCooldown)
         {
+            GameManager.current.infectionDuration -= 1;
             other.gameObject.GetComponent<Player>().Infect();
             Heal();
         }

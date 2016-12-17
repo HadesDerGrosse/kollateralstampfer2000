@@ -5,11 +5,12 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager current;
 
-    public float infectionDuration = 10;
+    public float infectionDuration = 15;
     public float infectionCooldown = 1;
 
     public GameObject startUI;
     public GameObject endUI;
+    public GameObject infectionUI;
 
     [HideInInspector]
     public Player[] players;
@@ -46,6 +47,7 @@ public class GameManager : MonoBehaviour {
     {
         SetKinematicToPlayers(true);
         endUI.SetActive(true);
+        endUI.GetComponent<EndUi>().SetEndUI(pNum);
     }
 
 
