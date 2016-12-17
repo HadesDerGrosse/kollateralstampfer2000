@@ -7,6 +7,7 @@ public class poisenColor : MonoBehaviour {
     public Color deadColor;
 
     public SpriteRenderer head;
+    public TrailRenderer[] trails;
 
     private Player player;
     
@@ -25,11 +26,22 @@ public class poisenColor : MonoBehaviour {
 	void Update () {
 
         if (!player.infected)
+        {
             head.material.color = Color.white;
+            foreach(TrailRenderer trail in trails)
+            {
+                trail.material.color = Color.white;
+            }
+        }
 
         else
         {
-           // head.material.color = Color.Lerp();
+            head.material.color = Color.Lerp(infectedColor, deadColor, player.GetInfectionStatePercent());
+
+            foreach (TrailRenderer trail in trails)
+            {
+                trail.material.color = head.material.color;
+            }
         }
 
 	}
