@@ -32,6 +32,7 @@ public class Player : MonoBehaviour {
 
     public void Infect()
     {
+        Debug.Log("asd");
         infected = true;
         infectionTime = Time.time;
         GameManager.current.infectionUI.GetComponent<AttachUIToPlayer>().Attach(transform);

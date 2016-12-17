@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour {
     public GameObject endUI;
     public GameObject infectionUI;
 
+    public bool gameRunning = false;
+
     [HideInInspector]
     public Player[] players;
 	
@@ -27,16 +29,18 @@ public class GameManager : MonoBehaviour {
     }
 	
 	void Update () {
-        if (Input.GetButton("start"))
+        if (Input.GetButton("start") && !gameRunning)
             StartGame();
 	}
 
     public void StartGame()
     {
+        gameRunning = true;
         players[Random.Range(0, 3)].Infect();
         startUI.SetActive(false);
         endUI.SetActive(false);
         SetKinematicToPlayers(false);
+        infectionDuration = 15;
         for (int i = 0; i < players.Length; i++)
         {
             players[i].ResetTransform();
@@ -45,6 +49,7 @@ public class GameManager : MonoBehaviour {
 
     public void EndGame(PlayerNumber pNum)
     {
+        gameRunning = false;
         SetKinematicToPlayers(true);
         endUI.SetActive(true);
         endUI.GetComponent<EndUi>().SetEndUI(pNum);
