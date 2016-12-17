@@ -8,6 +8,10 @@ public class GameManager : MonoBehaviour {
     public float infectionDuration = 15;
     public float infectionCooldown = 1;
     public float playerBounceForce = 10f;
+    public float infectionSpeedFac = 0.8f;
+    public float infectionAttractionRadiusFac = 1.7f;
+    public float infectionStrengthFac = 1.2f;
+    public float infectionRotateFac = 1.5f;
 
     public GameObject startUI;
     public GameObject endUI;
