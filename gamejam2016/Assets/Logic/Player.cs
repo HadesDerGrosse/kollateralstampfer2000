@@ -6,12 +6,13 @@ public enum PlayerNumber { P1, P2, P3, P4 }
 public class Player : MonoBehaviour {
 
     public PlayerNumber pNum;
-
+    public Material standardMaterial;
+    public Material infectedMaterial;
     public bool infected = false;
 
     private bool boost;
     private float rotate;
-    private Rigidbody2D rb2d;
+    private float infectionTime = 0;
 
 
     public bool GetBoost()
@@ -24,13 +25,36 @@ public class Player : MonoBehaviour {
         return rotate;
     }
 
-	void Awake () {
-        rb2d = GetComponent<Rigidbody2D>();
-	}
+    public void Infect()
+    {
+        infected = true;
+        GetComponentsInChildren<Renderer>()[0].material = infectedMaterial;
+        infectionTime = Time.time;
+    }
+
+    public void Heal()
+    {
+        infected = false;
+        GetComponentsInChildren<Renderer>()[0].material = standardMaterial;
+    }
+
 	
 	
 	void Update () {
         boost = Input.GetButton("Boost_" + pNum);
         rotate = Input.GetAxis("Turn_" + pNum);
+
+        //TODO actually kill player
+        if (Time.time - infectionTime > GameManager.current.infectionDuration && infected)
+            Debug.Log("Die!!!!!!!!!!!!");
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (infected && other.gameObject.GetComponent<Player>() && (Time.time - infectionTime) > GameManager.current.infectionCooldown)
+        {
+            other.gameObject.GetComponent<Player>().Infect();
+            Heal();
+        }
     }
 }

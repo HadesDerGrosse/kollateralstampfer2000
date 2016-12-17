@@ -5,12 +5,10 @@ public class CameraPosition : MonoBehaviour {
 
     public float ease = 0.8f;
 	
-    private Player[] players;
     private float startZ;
     private Bounds startPlayerSquare;
 
 	void Start () {
-        players = FindObjectsOfType<Player>();
         startZ = transform.position.z;
         startPlayerSquare = PlayersAABB();
 	}
@@ -32,10 +30,10 @@ public class CameraPosition : MonoBehaviour {
 
     private Bounds PlayersAABB()
     {
-        Bounds bb = new Bounds(players[0].transform.position, Vector3.zero);
-        for (int i = 1; i < players.Length; i++)
+        Bounds bb = new Bounds(GameManager.current.players[0].transform.position, Vector3.zero);
+        for (int i = 1; i < GameManager.current.players.Length; i++)
         {
-            bb.Encapsulate(players[i].transform.position);
+            bb.Encapsulate(GameManager.current.players[i].transform.position);
         }
         return bb;
     }
