@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
 
     public float infectionDuration = 15;
     public float infectionCooldown = 1;
+    public float playerBounceForce = 10f;
 
     public GameObject startUI;
     public GameObject endUI;

@@ -8,6 +8,9 @@ public class Player : MonoBehaviour {
 
     public PlayerNumber pNum;
     public bool infected = false;
+    public float infectionAttractStrength = 1.2f;
+    public float infectionAttractRadius = 1.2f;
+
 
     private bool boost;
     private float rotate;
@@ -32,16 +35,18 @@ public class Player : MonoBehaviour {
 
     public void Infect()
     {
-        Debug.Log("asd");
         infected = true;
         infectionTime = Time.time;
         GameManager.current.infectionUI.GetComponent<AttachUIToPlayer>().Attach(transform);
         GameManager.current.infectionUI.SetActive(true);
+        GetComponent<Attractor>().attractionRadius *= infectionAttractRadius;
+        GetComponent<Attractor>().attractionStrength *= infectionAttractStrength;
     }
 
     public void Heal()
     {
         infected = false;
+        GetComponent<Attractor>().Reset();
     }
 
     public void ResetTransform()

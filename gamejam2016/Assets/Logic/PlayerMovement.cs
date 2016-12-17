@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour {
         rb2d = GetComponent<Rigidbody2D>();
         player = GetComponent<Player>();
 	}
+
 	
 	void FixedUpdate () {
         if (player.GetBoost())
@@ -26,4 +27,21 @@ public class PlayerMovement : MonoBehaviour {
 
         rb2d.AddTorque(-player.GetRotate() * rotateStrength);
 	}
+
+    public void Attract(Vector3 target, float strength, float attractRadius)
+    {
+        Vector3 direction = target - transform.position;
+        
+        rb2d.AddForce(direction.normalized * strength);
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.GetComponent<Player>())
+        {
+            Vector3 direction = transform.position - other.transform.position;
+            rb2d.AddForce(direction.normalized * GameManager.current.playerBounceForce, ForceMode2D.Impulse);
+        }
+    }
+
 }
