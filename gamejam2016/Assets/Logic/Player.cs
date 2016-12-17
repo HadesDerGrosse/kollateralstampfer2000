@@ -14,6 +14,9 @@ public class Player : MonoBehaviour {
     private float infectionTime = 0;
     private Vector3 startPos;
 
+    public GameObject infectionEffect;
+    public AnimationCurve scalecurve;    
+
 
     public bool GetBoost()
     {
@@ -38,7 +41,9 @@ public class Player : MonoBehaviour {
         GameManager.current.infectionUI.SetActive(true);
         GetComponent<Attractor>().attractionRadius *= GameManager.current.infectionAttractionRadiusFac;
         GetComponent<Attractor>().attractionStrength *= GameManager.current.infectionStrengthFac;
-        transform.localScale = Vector3.one * 3;
+       // transform.localScale = Vector3.one * 3;
+
+        Instantiate(infectionEffect, this.transform.position, transform.rotation);
     }
 
     public void Heal()
@@ -74,6 +79,9 @@ public class Player : MonoBehaviour {
             GameManager.current.infectionUI.SetActive(false);
             Heal();
         }
+
+        if (infected)
+            transform.localScale = Vector3.one * scalecurve.Evaluate(Time.time - infectionTime);
     }
 
     void OnCollisionEnter2D(Collision2D other)
