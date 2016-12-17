@@ -6,8 +6,6 @@ public enum PlayerNumber { P1, P2, P3, P4 }
 public class Player : MonoBehaviour {
 
     public PlayerNumber pNum;
-    public Material standardMaterial;
-    public Material infectedMaterial;
     public bool infected = false;
 
     private bool boost;
@@ -34,14 +32,12 @@ public class Player : MonoBehaviour {
     public void Infect()
     {
         infected = true;
-        GetComponentsInChildren<Renderer>()[0].material = infectedMaterial;
         infectionTime = Time.time;
     }
 
     public void Heal()
     {
         infected = false;
-        GetComponentsInChildren<Renderer>()[0].material = standardMaterial;
     }
 
     public void ResetTransform()
@@ -60,7 +56,7 @@ public class Player : MonoBehaviour {
 	void Update () {
         boost = Input.GetButton("Boost_" + pNum);
         rotate = Input.GetAxis("Turn_" + pNum);
-
+        Debug.Log(GetInfectionStatePercent());
         //TODO actually kill player
         if (Time.time - infectionTime > GameManager.current.infectionDuration && infected)
             GameManager.current.EndGame(pNum);
