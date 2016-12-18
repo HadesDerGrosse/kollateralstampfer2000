@@ -8,14 +8,14 @@ public class Player : MonoBehaviour {
 
     public PlayerNumber pNum;
     public bool infected = false;
-    public float infectionAttractStrength = 1.2f;
-    public float infectionAttractRadius = 1.2f;
-
 
     private bool boost;
     private float rotate;
     private float infectionTime = 0;
     private Vector3 startPos;
+
+    public GameObject infectionEffect;
+    public AnimationCurve scalecurve;    
 
 
     public bool GetBoost()
@@ -39,14 +39,18 @@ public class Player : MonoBehaviour {
         infectionTime = Time.time;
         GameManager.current.infectionUI.GetComponent<AttachUIToPlayer>().Attach(transform);
         GameManager.current.infectionUI.SetActive(true);
-        GetComponent<Attractor>().attractionRadius *= infectionAttractRadius;
-        GetComponent<Attractor>().attractionStrength *= infectionAttractStrength;
+        GetComponent<Attractor>().attractionRadius *= GameManager.current.infectionAttractionRadiusFac;
+        GetComponent<Attractor>().attractionStrength *= GameManager.current.infectionStrengthFac;
+       // transform.localScale = Vector3.one * 3;
+
+        Instantiate(infectionEffect, this.transform.position, transform.rotation);
     }
 
     public void Heal()
     {
         infected = false;
         GetComponent<Attractor>().Reset();
+        transform.localScale = Vector3.one;
     }
 
     public void ResetTransform()
@@ -75,13 +79,16 @@ public class Player : MonoBehaviour {
             GameManager.current.infectionUI.SetActive(false);
             Heal();
         }
+
+        if (infected)
+            transform.localScale = Vector3.one * scalecurve.Evaluate(Time.time - infectionTime);
     }
 
     void OnCollisionEnter2D(Collision2D other)
     {
         if (infected && other.gameObject.GetComponent<Player>() && (Time.time - infectionTime) > GameManager.current.infectionCooldown)
         {
-            GameManager.current.infectionDuration -= 1;
+            //GameManager.current.infectionDuration -= 1;
             other.gameObject.GetComponent<Player>().Infect();
             Heal();
         }
