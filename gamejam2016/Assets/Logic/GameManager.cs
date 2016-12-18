@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviour {
         if (Input.GetButton("start") && !gameRunning)
             StartGame();
 
-        Debug.Log(infectionDuration);
 	}
 
     public void StartGame()
