@@ -13,6 +13,9 @@ public class Player : MonoBehaviour {
     private float rotate;
     private float infectionTime = 0;
     private Vector3 startPos;
+    private int score = 0;
+
+    private float pickupSpawnTime = 0;
 
     public GameObject infectionEffect;
     public AnimationCurve scalecurve;    
@@ -28,6 +31,13 @@ public class Player : MonoBehaviour {
         return rotate;
     }
 
+    public void AddScore(int score)
+    {
+        this.score += score;
+        Debug.Log(this.score);
+        ScoreManager.current.SetPlayerScore(pNum, this.score);
+    }
+
     public float GetInfectionStatePercent()
     {
         return (Time.time - infectionTime)/GameManager.current.infectionDuration;
@@ -41,7 +51,6 @@ public class Player : MonoBehaviour {
         GameManager.current.infectionUI.SetActive(true);
         GetComponent<Attractor>().attractionRadius *= GameManager.current.infectionAttractionRadiusFac;
         GetComponent<Attractor>().attractionStrength *= GameManager.current.infectionStrengthFac;
-       // transform.localScale = Vector3.one * 3;
 
         Instantiate(infectionEffect, this.transform.position, transform.rotation);
     }
@@ -51,12 +60,15 @@ public class Player : MonoBehaviour {
         infected = false;
         GetComponent<Attractor>().Reset();
         transform.localScale = Vector3.one;
+        score += ScoreManager.current.healBonus;
+        ScoreManager.current.SetPlayerScore(pNum, score);
     }
 
-    public void ResetTransform()
+    public void ResetPlayer()
     {
         transform.position = startPos;
         transform.localRotation = Quaternion.identity;
+        score = 0;
     }
 
 	
@@ -71,7 +83,15 @@ public class Player : MonoBehaviour {
         rotate = Input.GetAxis("Turn_" + pNum);
 
         if (infected)
+        {
+            transform.localScale = Vector3.one * scalecurve.Evaluate(Time.time - infectionTime);
             GameManager.current.infectionUI.GetComponent<Text>().text = GetInfectionStatePercent().ToString();
+            if(Time.time - pickupSpawnTime > GameManager.current.pickupSpawnCooldown)
+            {
+                Instantiate(GameManager.current.pickup, transform.position, Quaternion.identity);
+                pickupSpawnTime = Time.time;
+            }
+        }
 
         if (Time.time - infectionTime > GameManager.current.infectionDuration && infected)
         {
@@ -79,9 +99,6 @@ public class Player : MonoBehaviour {
             GameManager.current.infectionUI.SetActive(false);
             Heal();
         }
-
-        if (infected)
-            transform.localScale = Vector3.one * scalecurve.Evaluate(Time.time - infectionTime);
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -91,6 +108,16 @@ public class Player : MonoBehaviour {
             //GameManager.current.infectionDuration -= 1;
             other.gameObject.GetComponent<Player>().Infect();
             Heal();
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.GetComponent<Pickup>() && !infected)
+        {
+            score += other.GetComponent<Pickup>().value;
+            ScoreManager.current.SetPlayerScore(pNum, score);
+            Destroy(other.gameObject);
         }
     }
 }

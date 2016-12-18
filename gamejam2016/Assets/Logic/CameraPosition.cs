@@ -8,8 +8,6 @@ public class CameraPosition : MonoBehaviour {
     private float startZ;
     private Bounds startPlayerSquare;
 
-    private GameObject[] players;
-
     public float maxLeft, maxRight, maxUp, maxDown, maxForward,maxBack = 20;
     public bool top, bottom, left, right;
     public Vector3 dir;
@@ -18,7 +16,6 @@ public class CameraPosition : MonoBehaviour {
         
         startZ = transform.position.z;
         startPlayerSquare = PlayersAABB();
-        players = GameObject.FindGameObjectsWithTag("Player");
 	}
 
     /*

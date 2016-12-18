@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour {
                 for (int i = 0; i < targets.Length; i++)
                 {
                     //if one of the targets is an infected PUSH
-                    if (targets[i].GetComponent<Player>().infected)
+                    if (targets[i].GetComponent<Player>() && targets[i].GetComponent<Player>().infected)
                     {
                         targets[i].GetComponent<Rigidbody2D>()
                             .AddForce((targets[i].transform.position - posAvg).normalized 
@@ -58,6 +58,8 @@ public class PlayerMovement : MonoBehaviour {
                             ,ForceMode2D.Impulse);
                     }
                 }
+                //add points
+                player.AddScore(ScoreManager.current.collideBonus);
             }
             //always bounce
             Vector3 direction = transform.position - other.transform.position;
