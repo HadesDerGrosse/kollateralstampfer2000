@@ -43,26 +43,17 @@ public class ScoreManager : MonoBehaviour {
         }
     }
 
-	public void SetPlayerScore(PlayerNumber pNum, int score)
+	public void UpdatePlayerScore()
     {
-        switch (pNum)
-        {
-            case PlayerNumber.P1: p1ScoreText.text = score.ToString();
-                break;
-            case PlayerNumber.P2:
-                p2ScoreText.text = score.ToString();
-                break;
-            case PlayerNumber.P3:
-                p3ScoreText.text = score.ToString();
-                break;
-            default:
-                break;
-        }
+        p1ScoreText.text = p1.points.ToString();
+        p2ScoreText.text = p2.points.ToString();
+        p3ScoreText.text = p3.points.ToString();
     }
 
     public void addPoints(PlayerNumber pn, int amount)
     {
         getStatsFromPlayer(pn).points += amount;
+        UpdatePlayerScore();
     }
     public void addDistance(PlayerNumber pn, float amount)
     {

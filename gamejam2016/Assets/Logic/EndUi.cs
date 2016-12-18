@@ -11,7 +11,7 @@ public class EndUi : MonoBehaviour {
 
     public void SetEndUI(PlayerNumber pNum)
     {
-        int maxPoints = ScoreManager.current.getMaximumPoints();
+        float maxPoints = ScoreManager.current.getMaximumPoints();
         p1ScoreImage.fillAmount = ScoreManager.current.p1.points / maxPoints;
         p2ScoreImage.fillAmount = ScoreManager.current.p2.points / maxPoints;
         p3ScoreImage.fillAmount = ScoreManager.current.p3.points / maxPoints;
