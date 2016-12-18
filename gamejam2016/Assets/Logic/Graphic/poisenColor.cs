@@ -3,8 +3,7 @@ using System.Collections;
 
 public class poisenColor : MonoBehaviour {
 
-    public Color infectedColor;
-    public Color deadColor;
+    public Gradient infectedGradient;
 
     public SpriteRenderer head;
     public TrailRenderer[] trails;
@@ -36,7 +35,7 @@ public class poisenColor : MonoBehaviour {
 
         else
         {
-            head.material.color = Color.Lerp(infectedColor, deadColor, player.GetInfectionStatePercent());
+            head.material.color = infectedGradient.Evaluate(player.GetInfectionStatePercent());
 
             foreach (TrailRenderer trail in trails)
             {

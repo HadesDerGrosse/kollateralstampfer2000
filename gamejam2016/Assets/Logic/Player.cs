@@ -18,6 +18,7 @@ public class Player : MonoBehaviour {
     private float pickupSpawnTime = 0;
 
     public GameObject infectionEffect;
+    public GameObject shockWaveEffect;
     public AnimationCurve scalecurve;    
 
 
@@ -34,7 +35,6 @@ public class Player : MonoBehaviour {
     public void AddScore(int score)
     {
         this.score += score;
-        Debug.Log(this.score);
         ScoreManager.current.SetPlayerScore(pNum, this.score);
     }
 
@@ -103,11 +103,27 @@ public class Player : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (infected && other.gameObject.GetComponent<Player>() && (Time.time - infectionTime) > GameManager.current.infectionCooldown)
+        Player otherPlayer = other.gameObject.GetComponent<Player>();
+        if (otherPlayer == null)            return;
+
+        if (infected && otherPlayer && (Time.time - infectionTime) > GameManager.current.infectionCooldown)
         {
             //GameManager.current.infectionDuration -= 1;
-            other.gameObject.GetComponent<Player>().Infect();
-            Heal();
+            otherPlayer.Infect();
+            this.Heal();
+        }
+
+        if(!infected && !otherPlayer.infected)
+        {
+            if(this.pNum < otherPlayer.pNum)
+            {
+                Vector3 effectPosition = (transform.position + otherPlayer.transform.position)/ 2;
+                float speed = otherPlayer.GetComponent<Rigidbody2D>().velocity.magnitude + GetComponent<Rigidbody2D>().velocity.magnitude;
+
+                GameObject effect = (GameObject)Instantiate(shockWaveEffect, effectPosition, transform.rotation);
+                effect.transform.localScale = Vector3.one * speed * 0.2f; ;
+            }
+                
         }
     }
 
@@ -120,4 +136,6 @@ public class Player : MonoBehaviour {
             Destroy(other.gameObject);
         }
     }
+
+    
 }
