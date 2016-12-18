@@ -37,7 +37,7 @@ public class Attractor : MonoBehaviour {
                 {
                     ScoreManager.current.addPoints(player.pNum, ScoreManager.current.pickUpBonus);
                     ScoreManager.current.addBoni(player.pNum, 1);
-                    Destroy(target.gameObject);
+                    target.GetComponent<Pickup>().DestroyWithEffect();
                 }
             }
                 
