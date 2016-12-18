@@ -68,7 +68,8 @@ public class Player : MonoBehaviour {
             GameManager.current.infectionUI.GetComponent<Text>().text = GetInfectionStatePercent().ToString();
             if(Time.time - pickupSpawnTime > GameManager.current.pickupSpawnCooldown)
             {
-                Instantiate(GameManager.current.pickup, transform.position, Quaternion.identity);
+                GameObject pickupInstance = (GameObject)Instantiate(GameManager.current.pickup, transform.position, Quaternion.identity);
+                pickupInstance.GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(0,1), Random.Range(0, 1)),ForceMode2D.Impulse);
                 pickupSpawnTime = Time.time;
             }
         }
