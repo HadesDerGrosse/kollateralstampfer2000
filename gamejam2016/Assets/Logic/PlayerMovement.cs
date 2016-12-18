@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour {
 
     void Update()
     {
-        boost = Input.GetButton("Boost_" + player.pNum);
+        boost = Input.GetButton("Boost_" + player.pNum) || Mathf.Abs(Input.GetAxisRaw("Boost_" + player.pNum)) > 0;
         rotate = Input.GetAxis("Turn_" + player.pNum);
     }
 

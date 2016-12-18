@@ -27,6 +27,11 @@ public class Player : MonoBehaviour {
     {
         infected = true;
         infectionTime = Time.time;
+        if(Time.time - GameManager.current.lastTimeInfected > 7)
+        {
+            GameManager.current.infectionDuration--;
+            GameManager.current.lastTimeInfected = Time.time;
+        }
         GameManager.current.infectionUI.GetComponent<AttachUIToPlayer>().Attach(transform);
         GameManager.current.infectionUI.SetActive(true);
         GetComponent<Attractor>().attractionRadius *= GameManager.current.infectionAttractionRadiusFac;

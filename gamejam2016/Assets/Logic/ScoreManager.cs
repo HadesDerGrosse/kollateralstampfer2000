@@ -101,4 +101,9 @@ public class ScoreManager : MonoBehaviour {
     {
         return Mathf.Max(p1.points, p2.points, p3.points, p4.points);
     }
+
+    public void ResetPlayerScores()
+    {
+        p1ScoreText.text = p2ScoreText.text = p3ScoreText.text = "0";
+    }
 }

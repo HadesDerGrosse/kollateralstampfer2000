@@ -9,7 +9,7 @@ public class Pickup : MonoBehaviour {
     {
         Vector3 direction = target - transform.position;
 
-        GetComponent<Rigidbody2D>().AddForce(direction.normalized * strength/2);
+        GetComponent<Rigidbody2D>().AddForce(direction.normalized * strength/1.5f);
     }
 
 }
