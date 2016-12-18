@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour {
             Vector3 hitPosition = (player.transform.position + otherPlayer.transform.position) / 2;
 
             //if infected hits noninfected
-            if(player.infected && !otherPlayer.infected)
+            if(player.infected && !otherPlayer.infected && player.canInfect())
             {
                 player.Heal();
                 player.AddScore(ScoreManager.current.healBonus);

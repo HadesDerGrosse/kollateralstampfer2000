@@ -10,6 +10,7 @@ public class ScoreManager : MonoBehaviour {
 
     public int collideBonus = 10;
     public int healBonus = 10;
+    public int pickUpBonus = 10;
 
 	
     public ScoreManager()

@@ -41,7 +41,6 @@ public class Player : MonoBehaviour {
         GameManager.current.infectionUI.SetActive(true);
         GetComponent<Attractor>().attractionRadius *= GameManager.current.infectionAttractionRadiusFac;
         GetComponent<Attractor>().attractionStrength *= GameManager.current.infectionStrengthFac;
-
         
     }
 
@@ -98,6 +97,10 @@ public class Player : MonoBehaviour {
         Instantiate(infectionEffect, this.transform.position, transform.rotation);
     }
 
+    public bool canInfect()
+    {
+        return Time.time > infectionTime + GameManager.current.infectionCooldown;
+    }
 
 
 

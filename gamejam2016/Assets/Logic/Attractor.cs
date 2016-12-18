@@ -8,23 +8,40 @@ public class Attractor : MonoBehaviour {
 
     private float startAttractionRadius, startAttractionStrength;
 
+    public LayerMask infectedAttraction;
+    public LayerMask cleanAttraction;
+
+    private Player player;
+
     void Awake()
     {
+        player = GetComponent<Player>();
         startAttractionRadius = attractionRadius;
         startAttractionStrength = attractionStrength;
     }
 
 	void Update () {
-        //pull other objects to this position
-        Collider2D[] interactables = Physics2D.OverlapCircleAll(transform.position, attractionRadius, 1 << LayerMask.NameToLayer("Interactable"));
-        for (int i = 0; i < interactables.Length; i++)
-        {
-            if (interactables[i].GetComponent<PlayerMovement>())
-                interactables[i].GetComponent<PlayerMovement>().Attract(transform.position, attractionStrength, attractionRadius);
 
-            if (GetComponent<Player>() && !GetComponent<Player>().infected &&  interactables[i].GetComponent<Pickup>())
-                interactables[i].GetComponent<Pickup>().Attract(transform.position, attractionStrength, attractionRadius);
+        Collider2D[] interactables = Physics2D.OverlapCircleAll(transform.position, attractionRadius, (player.infected)?infectedAttraction:cleanAttraction);
+
+        foreach (Collider2D target in interactables)
+        {
+            if (target.GetComponent<PlayerMovement>())
+                target.GetComponent<PlayerMovement>().Attract(transform.position, attractionStrength, attractionRadius);
+
+            if (player != null && !GetComponent<Player>().infected && target.GetComponent<Pickup>())
+            {
+                target.GetComponent<Pickup>().Attract(transform.position, attractionStrength, attractionRadius);
+
+                if(Vector3.Distance(transform.position, target.transform.position) < 0.7f)
+                {
+                    player.AddScore(ScoreManager.current.pickUpBonus);
+                    Destroy(target.gameObject);
+                }
+            }
+                
         }
+
     }
 
     public void Reset()
