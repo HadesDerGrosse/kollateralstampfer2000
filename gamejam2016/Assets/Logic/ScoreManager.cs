@@ -96,4 +96,9 @@ public class ScoreManager : MonoBehaviour {
             default: return null;
         }
     }
+
+    public int getMaximumPoints()
+    {
+        return Mathf.Max(p1.points, p2.points, p3.points, p4.points);
+    }
 }
