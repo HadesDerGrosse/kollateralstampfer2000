@@ -27,7 +27,17 @@ public class EndUi : MonoBehaviour {
         shockwavesImage.sprite = getSpriteFromPlayernumber(ScoreManager.current.GetPlayerWithMaxShockwaves());
 
         int playedTime = Mathf.RoundToInt(Time.time - GameManager.current.gameStartTime);
-        roundTime.text =  playedTime/60 +":"+playedTime%60;
+        int minutes = playedTime / 60;
+        int seconds = playedTime % 60;
+        string timeString = "";
+
+        if (minutes < 10) timeString += "0";
+        timeString += minutes.ToString();
+        timeString += ":";
+        if (seconds < 10) timeString += "0";
+        timeString += seconds.ToString();
+
+        roundTime.text = timeString;
    
     }
 
