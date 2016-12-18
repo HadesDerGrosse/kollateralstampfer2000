@@ -9,8 +9,6 @@ public class Player : MonoBehaviour {
     public PlayerNumber pNum;
     public bool infected = false;
 
-    private bool boost;
-    private float rotate;
     private float infectionTime = 0;
     private Vector3 startPos;
     private int score = 0;
@@ -22,15 +20,7 @@ public class Player : MonoBehaviour {
     public AnimationCurve scalecurve;    
 
 
-    public bool GetBoost()
-    {
-        return boost;
-    }
 
-    public float GetRotate()
-    {
-        return rotate;
-    }
 
     public void AddScore(int score)
     {
@@ -77,9 +67,7 @@ public class Player : MonoBehaviour {
     }
 	
 	void Update () {
-        boost = Input.GetButton("Boost_" + pNum);
-        rotate = Input.GetAxis("Turn_" + pNum);
-
+       
         if (infected)
         {
             transform.localScale = Vector3.one * scalecurve.Evaluate(Time.time - infectionTime);
@@ -98,21 +86,6 @@ public class Player : MonoBehaviour {
             Heal();
         }
     }
-
-    /*
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        Player otherPlayer = other.gameObject.GetComponent<Player>();
-        if (otherPlayer == null)            return;
-
-        if (infected && otherPlayer && (Time.time - infectionTime) > GameManager.current.infectionCooldown)
-        {
-            //GameManager.current.infectionDuration -= 1;
-            otherPlayer.Infect();
-            this.Heal();
-        }
-        
-    }*/
 
     public void spawnShockwaveEffect(float speed, Vector3 position)
     {
