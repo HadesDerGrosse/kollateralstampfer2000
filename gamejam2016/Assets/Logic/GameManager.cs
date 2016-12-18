@@ -53,6 +53,11 @@ public class GameManager : MonoBehaviour {
         inGameUI.SetActive(true);
         SetKinematicToPlayers(false);
         infectionDuration = 15;
+        Pickup[] pickups = FindObjectsOfType<Pickup>();
+        for (int i = 0; i < pickups.Length; i++)
+        {
+            Destroy(pickups[i].gameObject);
+        }
         for (int i = 0; i < players.Length; i++)
         {
             players[i].ResetPlayer();
