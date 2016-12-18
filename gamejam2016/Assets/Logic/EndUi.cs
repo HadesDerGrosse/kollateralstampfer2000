@@ -19,6 +19,11 @@ public class EndUi : MonoBehaviour {
         p1ScoreText.text = ScoreManager.current.p1.points.ToString();
         p2ScoreText.text = ScoreManager.current.p2.points.ToString();
         p3ScoreText.text = ScoreManager.current.p3.points.ToString();
+
+        distanceImage.sprite = getSpriteFromPlayernumber(ScoreManager.current.GetPlayerWithMaxDistance());
+        infectedImage.sprite = getSpriteFromPlayernumber(ScoreManager.current.GetPlayerWithMaxInfected());
+        boniImage.sprite = getSpriteFromPlayernumber(ScoreManager.current.GetPlayerWithMaxPickUp());
+        shockwavesImage.sprite = getSpriteFromPlayernumber(ScoreManager.current.GetPlayerWithMaxShockwaves());
     }
 
     private Sprite getSpriteFromPlayernumber(PlayerNumber pn)

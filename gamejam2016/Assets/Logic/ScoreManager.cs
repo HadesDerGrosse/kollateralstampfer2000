@@ -34,7 +34,13 @@ public class ScoreManager : MonoBehaviour {
         if (current)
             Destroy(this);
         else
+        {
             current = this;
+            p1 = new Stats();
+            p2 = new Stats();
+            p3 = new Stats();
+            p4 = new Stats();
+        }
     }
 
 	public void SetPlayerScore(PlayerNumber pNum, int score)
@@ -106,4 +112,36 @@ public class ScoreManager : MonoBehaviour {
     {
         p1ScoreText.text = p2ScoreText.text = p3ScoreText.text = "0";
     }
+
+    public PlayerNumber GetPlayerWithMaxDistance()
+    {
+        if (p1.distance > p2.distance && p1.distance > p3.distance) return PlayerNumber.P1;
+        if (p2.distance > p1.distance && p2.distance > p3.distance) return PlayerNumber.P2;
+        return PlayerNumber.P3;
+    }
+
+    public PlayerNumber GetPlayerWithMaxPickUp()
+    {
+        if (p1.boni > p2.boni && p1.boni > p3.boni) return PlayerNumber.P1;
+        if (p2.boni > p1.boni && p2.boni > p3.boni) return PlayerNumber.P2;
+        return PlayerNumber.P3;
+    }
+    public PlayerNumber GetPlayerWithMaxShockwaves()
+    {
+        if (p1.shockwaves > p2.shockwaves && p1.shockwaves > p3.shockwaves) return PlayerNumber.P1;
+        if (p2.shockwaves > p1.shockwaves && p2.shockwaves > p3.shockwaves) return PlayerNumber.P2;
+        return PlayerNumber.P3;
+    }
+    public PlayerNumber GetPlayerWithMaxInfected()
+    {
+        if (p1.infected > p2.infected && p1.infected > p3.infected) return PlayerNumber.P1;
+        if (p2.infected > p1.infected && p2.infected > p3.infected) return PlayerNumber.P2;
+        return PlayerNumber.P3;
+    }
+
+
+
+
+
+
 }
