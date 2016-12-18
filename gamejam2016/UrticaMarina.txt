@@ -1,0 +1,19 @@
+URTICA MARINA
+
+Group members: Markus Hadinger, Christoph Lendenfeld, Doris Rastinger
+
+Setting:
+One out of three jellyfish has an infection. It has to touch another one to pass it on. The healthy jellyfish can collect the pickup boni spawned by the infected jellyfish to gain points. They can also bump into each other to create a wave that throws back the infected jellyfish. All jellyfish naturally attract each other and can further pull in boni by blinging up.
+
+Game goal:
+The goal is to collect as many points as possible. Points are gained from picking up bonus objects, hitting another healthy jellyfish or giving the infection to another jellyfish when infected.
+
+Controls with X-Box-Controllers:
+- boost on A or right trigger
+- Pickup/Bling with B or right or left back button
+- rotate left or right with left joystick or D-pad
+
+Controls with Keyboard:
+- boost with W, I and up
+- pickup/bling with Q, U and .
+- rotate with A/D, J/L and left/right
