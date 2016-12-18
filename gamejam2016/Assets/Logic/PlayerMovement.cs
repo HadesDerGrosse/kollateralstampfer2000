@@ -48,16 +48,26 @@ public class PlayerMovement : MonoBehaviour {
                 for (int i = 0; i < targets.Length; i++)
                 {
                     //if one of the targets is an infected PUSH
-                    if (targets[i].GetComponent<Player>().infected)
+                    if (targets[i].GetComponent<Player>() && targets[i].GetComponent<Player>().infected)
                     {
                         targets[i].GetComponent<Rigidbody2D>()
                             .AddForce((targets[i].transform.position - posAvg).normalized 
                             * GameManager.current.playerBounceForce 
                             * 3
-                            *(1-(targets[i].transform.position - posAvg).magnitude/20)
+                            *((25-(targets[i].transform.position - posAvg).magnitude)/20)
                             ,ForceMode2D.Impulse);
                     }
+                    //if the target is a pickup add a slight force to it
+                    if (targets[i].GetComponent<Pickup>())
+                        targets[i].GetComponent<Rigidbody2D>()
+                            .AddForce(
+                            (targets[i].transform.position - posAvg).normalized
+                            *3
+                            *((25 - (targets[i].transform.position - posAvg).magnitude) / 15)
+                            , ForceMode2D.Impulse);
                 }
+                //add points
+                player.AddScore(ScoreManager.current.collideBonus);
             }
             //always bounce
             Vector3 direction = transform.position - other.transform.position;

@@ -13,8 +13,13 @@ public class GameManager : MonoBehaviour {
     public float infectionStrengthFac = 1.2f;
     public float infectionRotateFac = 1.5f;
 
+    public float pickupSpawnCooldown = 0.5f;
+
+    public GameObject pickup;
+
     public GameObject startUI;
     public GameObject endUI;
+    public GameObject inGameUI;
     public GameObject infectionUI;
 
     public bool gameRunning = false;
@@ -24,9 +29,10 @@ public class GameManager : MonoBehaviour {
 	
     public GameManager()
     {
-        if (current != null)
-            return;
-        current = this;
+        if (current)
+            Destroy(this);
+        else
+            current = this;
     }
 
 	void Awake () {
@@ -44,11 +50,17 @@ public class GameManager : MonoBehaviour {
         players[Random.Range(0, 3)].Infect();
         startUI.SetActive(false);
         endUI.SetActive(false);
+        inGameUI.SetActive(true);
         SetKinematicToPlayers(false);
         infectionDuration = 15;
+        Pickup[] pickups = FindObjectsOfType<Pickup>();
+        for (int i = 0; i < pickups.Length; i++)
+        {
+            Destroy(pickups[i].gameObject);
+        }
         for (int i = 0; i < players.Length; i++)
         {
-            players[i].ResetTransform();
+            players[i].ResetPlayer();
         }
     }
 
@@ -57,6 +69,7 @@ public class GameManager : MonoBehaviour {
         gameRunning = false;
         SetKinematicToPlayers(true);
         endUI.SetActive(true);
+        inGameUI.SetActive(false);
         endUI.GetComponent<EndUi>().SetEndUI(pNum);
     }
 

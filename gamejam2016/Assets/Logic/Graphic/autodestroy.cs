@@ -8,9 +8,4 @@ public class autodestroy : MonoBehaviour {
 	void Start () {
         Destroy(this.gameObject, lifetime);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
