@@ -37,4 +37,10 @@ public class ScoreManager : MonoBehaviour {
                 break;
         }
     }
+
+
+    public void ResetPlayerScores()
+    {
+        p1ScoreText.text = p2ScoreText.text = p3ScoreText.text = "0";
+    }
 }

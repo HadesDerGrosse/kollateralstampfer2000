@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     public float infectionRotateFac = 1.5f;
 
     public float pickupSpawnCooldown = 0.5f;
+    public float lastTimeInfected = 0f;
 
     public GameObject pickup;
 
@@ -42,6 +43,8 @@ public class GameManager : MonoBehaviour {
 	void Update () {
         if (Input.GetButton("start") && !gameRunning)
             StartGame();
+
+        Debug.Log(infectionDuration);
 	}
 
     public void StartGame()
@@ -54,6 +57,7 @@ public class GameManager : MonoBehaviour {
         SetKinematicToPlayers(false);
         infectionDuration = 15;
         Pickup[] pickups = FindObjectsOfType<Pickup>();
+        ScoreManager.current.ResetPlayerScores();
         for (int i = 0; i < pickups.Length; i++)
         {
             Destroy(pickups[i].gameObject);
