@@ -38,42 +38,67 @@ public class PlayerMovement : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.GetComponent<Player>())
+        Player otherPlayer = other.gameObject.GetComponent<Player>();
+        Rigidbody2D otherRb2d = other.gameObject.GetComponent<Rigidbody2D>();
+
+
+        //Handle PlayerCollision
+        if (otherPlayer!=null)
         {
-            //if two non infected collide check if infected is close and push him away
-            if(!player.infected && !other.gameObject.GetComponent<Player>().infected)
+            //Callculate Variables
+            float speed = (rb2d.velocity - otherRb2d.velocity).magnitude;
+            Vector3 hitPosition = (player.transform.position + otherPlayer.transform.position) / 2;
+
+            //if infected hits noninfected
+            if(player.infected && !otherPlayer.infected)
             {
-                Vector3 posAvg = (transform.position + other.transform.position) / 2;
-                Collider2D[] targets = Physics2D.OverlapCircleAll(posAvg, 25, 1<<LayerMask.NameToLayer("Interactable"));
-                for (int i = 0; i < targets.Length; i++)
-                {
-                    //if one of the targets is an infected PUSH
-                    if (targets[i].GetComponent<Player>() && targets[i].GetComponent<Player>().infected)
-                    {
-                        targets[i].GetComponent<Rigidbody2D>()
-                            .AddForce((targets[i].transform.position - posAvg).normalized 
-                            * GameManager.current.playerBounceForce 
-                            * 3
-                            *((25-(targets[i].transform.position - posAvg).magnitude)/20)
-                            ,ForceMode2D.Impulse);
-                    }
-                    //if the target is a pickup add a slight force to it
-                    if (targets[i].GetComponent<Pickup>())
-                        targets[i].GetComponent<Rigidbody2D>()
-                            .AddForce(
-                            (targets[i].transform.position - posAvg).normalized
-                            *3
-                            *((25 - (targets[i].transform.position - posAvg).magnitude) / 15)
-                            , ForceMode2D.Impulse);
-                }
-                //add points
-                player.AddScore(ScoreManager.current.collideBonus);
+                player.Heal();
+                player.AddScore(ScoreManager.current.healBonus);
+                otherPlayer.Infect();
+                otherPlayer.spawnInfectedEffect();                
             }
+
+            //if noninfected hits noninfected. call only on one of them
+            if(!player.infected && !otherPlayer.infected && player.pNum < otherPlayer.pNum)
+            {
+                player.spawnShockwaveEffect(speed,hitPosition);
+                handleNoninfectedCollision(speed, hitPosition);
+                player.AddScore(ScoreManager.current.collideBonus);
+                otherPlayer.AddScore(ScoreManager.current.collideBonus);
+            }
+
             //always bounce
             Vector3 direction = transform.position - other.transform.position;
             rb2d.AddForce(direction.normalized * GameManager.current.playerBounceForce, ForceMode2D.Impulse);
-            
-        }
+        }        
     }
 
+    private void handleNoninfectedCollision(float speed, Vector3 hitpos)
+    {
+        Collider2D[] targets = Physics2D.OverlapCircleAll(hitpos, 25, 1 << LayerMask.NameToLayer("Interactable"));
+        for (int i = 0; i < targets.Length; i++)
+        {
+            //if one of the targets is an infected PUSH
+            if (targets[i].GetComponent<Player>() && targets[i].GetComponent<Player>().infected)
+            {
+                targets[i].GetComponent<Rigidbody2D>()
+                    .AddForce((targets[i].transform.position - hitpos).normalized
+                    * GameManager.current.playerBounceForce
+                    * 3
+                    * ((25 - (targets[i].transform.position - hitpos).magnitude) / 20)
+                    , ForceMode2D.Impulse);
+            }
+            //if the target is a pickup add a slight force to it
+            if (targets[i].GetComponent<Pickup>())
+                targets[i].GetComponent<Rigidbody2D>()
+                    .AddForce(
+                    (targets[i].transform.position - hitpos).normalized
+                    * 3
+                    * ((25 - (targets[i].transform.position - hitpos).magnitude) / 15)
+                    , ForceMode2D.Impulse);
+        }
+    }
+   
 }
+
+

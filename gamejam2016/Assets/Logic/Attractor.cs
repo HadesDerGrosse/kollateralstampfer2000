@@ -15,14 +15,15 @@ public class Attractor : MonoBehaviour {
     }
 
 	void Update () {
-        //pull other players to this position
+        //pull other objects to this position
         Collider2D[] interactables = Physics2D.OverlapCircleAll(transform.position, attractionRadius, 1 << LayerMask.NameToLayer("Interactable"));
         for (int i = 0; i < interactables.Length; i++)
         {
             if (interactables[i].GetComponent<PlayerMovement>())
-            {
                 interactables[i].GetComponent<PlayerMovement>().Attract(transform.position, attractionStrength, attractionRadius);
-            }
+
+            if (GetComponent<Player>() && !GetComponent<Player>().infected &&  interactables[i].GetComponent<Pickup>())
+                interactables[i].GetComponent<Pickup>().Attract(transform.position, attractionStrength, attractionRadius);
         }
     }
 

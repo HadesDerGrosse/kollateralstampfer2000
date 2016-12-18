@@ -52,7 +52,7 @@ public class Player : MonoBehaviour {
         GetComponent<Attractor>().attractionRadius *= GameManager.current.infectionAttractionRadiusFac;
         GetComponent<Attractor>().attractionStrength *= GameManager.current.infectionStrengthFac;
 
-        Instantiate(infectionEffect, this.transform.position, transform.rotation);
+        
     }
 
     public void Heal()
@@ -60,8 +60,6 @@ public class Player : MonoBehaviour {
         infected = false;
         GetComponent<Attractor>().Reset();
         transform.localScale = Vector3.one;
-        score += ScoreManager.current.healBonus;
-        ScoreManager.current.SetPlayerScore(pNum, score);
     }
 
     public void ResetPlayer()
@@ -101,6 +99,7 @@ public class Player : MonoBehaviour {
         }
     }
 
+    /*
     void OnCollisionEnter2D(Collision2D other)
     {
         Player otherPlayer = other.gameObject.GetComponent<Player>();
@@ -112,20 +111,22 @@ public class Player : MonoBehaviour {
             otherPlayer.Infect();
             this.Heal();
         }
+        
+    }*/
 
-        if(!infected && !otherPlayer.infected)
-        {
-            if(this.pNum < otherPlayer.pNum)
-            {
-                Vector3 effectPosition = (transform.position + otherPlayer.transform.position)/ 2;
-                float speed = otherPlayer.GetComponent<Rigidbody2D>().velocity.magnitude + GetComponent<Rigidbody2D>().velocity.magnitude;
-
-                GameObject effect = (GameObject)Instantiate(shockWaveEffect, effectPosition, transform.rotation);
-                effect.transform.localScale = Vector3.one * speed * 0.2f; ;
-            }
-                
-        }
+    public void spawnShockwaveEffect(float speed, Vector3 position)
+    {
+        GameObject effect = (GameObject)Instantiate(shockWaveEffect, position, transform.rotation);
+        effect.transform.localScale = Vector3.one * speed * 0.2f; ;
     }
+
+    public void spawnInfectedEffect()
+    {
+        Instantiate(infectionEffect, this.transform.position, transform.rotation);
+    }
+
+
+
 
     void OnTriggerEnter2D(Collider2D other)
     {
