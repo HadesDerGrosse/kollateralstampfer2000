@@ -11,22 +11,12 @@ public class Player : MonoBehaviour {
 
     private float infectionTime = 0;
     private Vector3 startPos;
-    private int score = 0;
-
     private float pickupSpawnTime = 0;
 
     public GameObject infectionEffect;
     public GameObject shockWaveEffect;
     public AnimationCurve scalecurve;    
 
-
-
-
-    public void AddScore(int score)
-    {
-        this.score += score;
-        ScoreManager.current.SetPlayerScore(pNum, this.score);
-    }
 
     public float GetInfectionStatePercent()
     {
@@ -41,7 +31,7 @@ public class Player : MonoBehaviour {
         GameManager.current.infectionUI.SetActive(true);
         GetComponent<Attractor>().attractionRadius *= GameManager.current.infectionAttractionRadiusFac;
         GetComponent<Attractor>().attractionStrength *= GameManager.current.infectionStrengthFac;
-        
+
     }
 
     public void Heal()
@@ -55,7 +45,7 @@ public class Player : MonoBehaviour {
     {
         transform.position = startPos;
         transform.localRotation = Quaternion.identity;
-        score = 0;
+        ScoreManager.current.getStatsFromPlayer(pNum).reset();
     }
 
 	
@@ -89,7 +79,7 @@ public class Player : MonoBehaviour {
     public void spawnShockwaveEffect(float speed, Vector3 position)
     {
         GameObject effect = (GameObject)Instantiate(shockWaveEffect, position, transform.rotation);
-        effect.transform.localScale = Vector3.one * speed * 0.2f; ;
+        effect.transform.localScale = Vector3.one * speed * 0.2f; 
     }
 
     public void spawnInfectedEffect()
@@ -100,19 +90,5 @@ public class Player : MonoBehaviour {
     public bool canInfect()
     {
         return Time.time > infectionTime + GameManager.current.infectionCooldown;
-    }
-
-
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.GetComponent<Pickup>() && !infected)
-        {
-            score += other.GetComponent<Pickup>().value;
-            ScoreManager.current.SetPlayerScore(pNum, score);
-            Destroy(other.gameObject);
-        }
-    }
-
-    
+    }    
 }

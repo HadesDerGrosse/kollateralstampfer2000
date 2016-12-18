@@ -45,6 +45,8 @@ public class PlayerMovement : MonoBehaviour {
             rb2d.AddTorque(-rotate * rotateStrength);
         else
             rb2d.AddTorque(-rotate * rotateStrength * GameManager.current.infectionRotateFac);
+
+        ScoreManager.current.addDistance(player.pNum, rb2d.velocity.magnitude);
     }
 
     public void Attract(Vector3 target, float strength, float attractRadius)
@@ -71,9 +73,11 @@ public class PlayerMovement : MonoBehaviour {
             if(player.infected && !otherPlayer.infected && player.canInfect())
             {
                 player.Heal();
-                player.AddScore(ScoreManager.current.healBonus);
                 otherPlayer.Infect();
-                otherPlayer.spawnInfectedEffect();                
+                otherPlayer.spawnInfectedEffect();
+
+                ScoreManager.current.addPoints(player.pNum, ScoreManager.current.healBonus);
+                ScoreManager.current.addInfected(otherPlayer.pNum, 1);
             }
 
             //if noninfected hits noninfected. call only on one of them
@@ -81,8 +85,11 @@ public class PlayerMovement : MonoBehaviour {
             {
                 player.spawnShockwaveEffect(speed,hitPosition);
                 handleNoninfectedCollision(speed, hitPosition);
-                player.AddScore(ScoreManager.current.collideBonus);
-                otherPlayer.AddScore(ScoreManager.current.collideBonus);
+
+                ScoreManager.current.addPoints(player.pNum, ScoreManager.current.collideBonus);
+                ScoreManager.current.addPoints(otherPlayer.pNum, ScoreManager.current.collideBonus);
+                ScoreManager.current.addShockwave(otherPlayer.pNum, 1);
+                ScoreManager.current.addShockwave(player.pNum, 1);
             }
 
             //always bounce

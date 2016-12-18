@@ -12,6 +12,22 @@ public class ScoreManager : MonoBehaviour {
     public int healBonus = 10;
     public int pickUpBonus = 10;
 
+    public class Stats
+    {
+        public int points;
+        public float distance;
+        public int shockwaves;
+        public int infected;
+        public int boni;
+
+        public void reset()
+        {
+            distance = boni = shockwaves = points = infected = 0;
+        }
+    }
+
+    public Stats p1, p2, p3, p4;
+
 	
     public ScoreManager()
     {
@@ -35,6 +51,49 @@ public class ScoreManager : MonoBehaviour {
                 break;
             default:
                 break;
+        }
+    }
+
+    public void addPoints(PlayerNumber pn, int amount)
+    {
+        getStatsFromPlayer(pn).points += amount;
+    }
+    public void addDistance(PlayerNumber pn, float amount)
+    {
+        getStatsFromPlayer(pn).distance += amount;
+    }
+
+    public void addShockwave(PlayerNumber pn, int amount)
+    {
+        getStatsFromPlayer(pn).shockwaves += amount;
+    }
+    public void addInfected(PlayerNumber pn, int amount)
+    {
+        getStatsFromPlayer(pn).infected += amount;
+    }
+
+    public void addBoni(PlayerNumber pn, int amount)
+    {
+        getStatsFromPlayer(pn).boni += amount;
+    }
+
+    public void resetStats()
+    {
+        p1.reset();
+        p2.reset();
+        p3.reset();
+        p4.reset();
+    }
+
+    public Stats getStatsFromPlayer(PlayerNumber pn)
+    {
+        switch (pn)
+        {
+            case PlayerNumber.P1: return p1;
+            case PlayerNumber.P2: return p2;
+            case PlayerNumber.P3: return p3;
+            case PlayerNumber.P4: return p4;
+            default: return null;
         }
     }
 }

@@ -35,7 +35,8 @@ public class Attractor : MonoBehaviour {
 
                 if(Vector3.Distance(transform.position, target.transform.position) < 0.7f)
                 {
-                    player.AddScore(ScoreManager.current.pickUpBonus);
+                    ScoreManager.current.addPoints(player.pNum, ScoreManager.current.pickUpBonus);
+                    ScoreManager.current.addBoni(player.pNum, 1);
                     Destroy(target.gameObject);
                 }
             }
