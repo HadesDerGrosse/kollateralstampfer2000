@@ -11,9 +11,15 @@ public class Pickup : MonoBehaviour {
     {
         Vector3 direction = target - transform.position;
 
-        GetComponent<Rigidbody2D>().AddForce(direction.normalized * strength/1.5f);
+        GetComponent<Rigidbody2D>().AddForce(direction.normalized * strength);
     }
 
+    public void AttractImpact(Vector3 target, float strength)
+    {
+        Vector3 direction = target - transform.position;
+
+        GetComponent<Rigidbody2D>().AddForce(direction.normalized * strength, ForceMode2D.Impulse);
+    }
 
 
     public void DestroyWithEffect()

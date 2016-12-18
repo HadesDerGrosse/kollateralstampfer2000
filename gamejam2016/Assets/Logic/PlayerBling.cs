@@ -19,6 +19,12 @@ public class PlayerBling : MonoBehaviour {
         {
             Instantiate(blingEffect, transform.position, Quaternion.identity);
             triggerTime = Time.time;
+            Collider2D[] objs = Physics2D.OverlapCircleAll(transform.position, 5, 1<<LayerMask.NameToLayer("Pickup"));
+            for (int i = 0; i < objs.Length; i++)
+            {
+                //Debug.Log(objs[i]);
+                objs[i].GetComponent<Pickup>().AttractImpact(transform.position, 10);
+            }
         }
 
 	}
