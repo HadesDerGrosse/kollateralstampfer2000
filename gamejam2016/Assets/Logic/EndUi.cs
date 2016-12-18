@@ -8,6 +8,7 @@ public class EndUi : MonoBehaviour {
     public Text p1ScoreText, p2ScoreText, p3ScoreText;
     public Image p1ScoreImage, p2ScoreImage, p3ScoreImage;
     public Image distanceImage, infectedImage, boniImage, shockwavesImage;
+    public Text roundTime;
 
     public void SetEndUI(PlayerNumber pNum)
     {
@@ -24,6 +25,10 @@ public class EndUi : MonoBehaviour {
         infectedImage.sprite = getSpriteFromPlayernumber(ScoreManager.current.GetPlayerWithMaxInfected());
         boniImage.sprite = getSpriteFromPlayernumber(ScoreManager.current.GetPlayerWithMaxPickUp());
         shockwavesImage.sprite = getSpriteFromPlayernumber(ScoreManager.current.GetPlayerWithMaxShockwaves());
+
+        int playedTime = Mathf.RoundToInt(Time.time - GameManager.current.gameStartTime);
+        roundTime.text =  playedTime/60 +":"+playedTime%60;
+   
     }
 
     private Sprite getSpriteFromPlayernumber(PlayerNumber pn)
