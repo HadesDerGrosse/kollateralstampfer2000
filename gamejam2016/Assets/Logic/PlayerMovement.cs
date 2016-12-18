@@ -9,14 +9,32 @@ public class PlayerMovement : MonoBehaviour {
     private Rigidbody2D rb2d;
     private Player player;
 
-	void Awake () {
+    private bool boost;
+    private float rotate;
+
+    void Awake () {
         rb2d = GetComponent<Rigidbody2D>();
         player = GetComponent<Player>();
 	}
 
-	
-	void FixedUpdate () {
-        if (player.GetBoost())
+    public bool GetBoost()
+    {
+        return boost;
+    }
+
+    public float GetRotate()
+    {
+        return rotate;
+    }
+
+    void Update()
+    {
+        boost = Input.GetButton("Boost_" + player.pNum);
+        rotate = Input.GetAxis("Turn_" + player.pNum);
+    }
+
+    void FixedUpdate () {
+        if (boost)
         {
             if(!player.infected)
                 rb2d.AddRelativeForce(Vector2.up * boostStrength);
@@ -24,9 +42,9 @@ public class PlayerMovement : MonoBehaviour {
                 rb2d.AddRelativeForce(Vector2.up * boostStrength * GameManager.current.infectionSpeedFac);
         }
         if(!player.infected)
-            rb2d.AddTorque(-player.GetRotate() * rotateStrength);
+            rb2d.AddTorque(-rotate * rotateStrength);
         else
-            rb2d.AddTorque(-player.GetRotate() * rotateStrength * GameManager.current.infectionRotateFac);
+            rb2d.AddTorque(-rotate * rotateStrength * GameManager.current.infectionRotateFac);
     }
 
     public void Attract(Vector3 target, float strength, float attractRadius)
